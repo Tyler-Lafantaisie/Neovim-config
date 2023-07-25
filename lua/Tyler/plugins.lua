@@ -3,7 +3,7 @@ local ensure_packer = function()
   local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
   if fn.empty(fn.glob(install_path)) > 0 then
     fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
+    vm.cmd [[packadd packer.nvim]]
     return true
   end
   return false
@@ -29,7 +29,7 @@ return require('packer').startup(function(use)
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
-} 
+}
 --   --nvim tree
     use {
   'nvim-tree/nvim-tree.lua',
@@ -54,27 +54,61 @@ use {
     end
 }
 
-
--- -- --compleation 
+-- -- --compleation
 
 use"hrsh7th/cmp-nvim-lsp"
 use"hrsh7th/nvim-cmp"
-
-use({
-	"L3MON4D3/LuaSnip",
-	-- follow latest release.
-	tag = "v<CurrentMajor>.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-	-- install jsregexp (optional!:).
-	run = "make install_jsregexp"
-})
+use "L3MON4D3/LuaSnip"
 
 use "rafamadriz/friendly-snippets"
 use 'saadparwaiz1/cmp_luasnip'
+
+-- lualine
+use {
+  'nvim-lualine/lualine.nvim',
+  requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+}
+
+-- indent blankline
+use "lukas-reineke/indent-blankline.nvim"
+
+-- modindicator
+use {
+  'mawkler/modicator.nvim',
+  setup = function()
+    -- These are required for Modicator to work
+    vim.o.cursorline = true
+    vim.o.number = true
+    vim.o.termguicolors = true
+  end,
+  config = function()
+    require('modicator').setup()
+  end
+}
+
+-- blame line
+use 'tveskag/nvim-blame-line'
+
+-- sentiment
+use "utilyre/sentiment.nvim"
+
+--auto pairs
+use {
+	"windwp/nvim-autopairs",
+    config = function() require("nvim-autopairs").setup {} end
+}
+
+--Trim
+
+use({
+  "cappyzawa/trim.nvim",
+  config = function()
+    require("trim").setup({})
+  end
+})
+
   -- plugins end here
     if packer_bootstrap then
     require('packer').sync()
   end
 end)
-
-
-
